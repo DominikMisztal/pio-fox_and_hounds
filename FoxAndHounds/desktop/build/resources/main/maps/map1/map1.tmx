@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.8" tiledversion="1.8.4" orientation="orthogonal" renderorder="right-down" width="10" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="19">
+ <tileset firstgid="1" source="SP-Tileset.tsx"/>
+ <layer id="3" name="terrain_1" width="10" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,
+0,567,567,567,567,567,567,567,567,567,
+0,567,0,0,0,0,0,0,0,567,
+0,567,0,0,0,0,0,0,0,567,
+0,567,0,0,0,0,0,0,0,567,
+0,567,0,0,0,0,0,0,0,567,
+0,567,0,0,0,0,0,0,0,567,
+0,567,567,567,567,567,567,567,567,567,
+0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="1" name="terrain_2" width="10" height="10">
+  <data encoding="csv">
+129,129,129,129,129,129,129,129,129,129,
+129,466,466,466,466,466,466,466,466,466,
+129,466,567,567,567,567,567,567,567,466,
+129,466,230,231,231,231,231,231,232,466,
+129,466,246,247,247,247,247,247,248,466,
+129,466,246,247,247,247,247,247,248,466,
+129,466,262,263,263,263,263,263,264,466,
+129,466,466,466,466,466,466,466,466,466,
+129,129,129,129,129,129,129,129,129,129,
+129,129,129,129,129,129,129,129,129,129
+</data>
+ </layer>
+ <objectgroup id="2" name="objects">
+  <object id="6" type="water" x="0" y="0" width="160" height="16"/>
+  <object id="8" type="water" x="0" y="16" width="16" height="144"/>
+  <object id="9" type="water" x="16" y="128" width="32" height="32"/>
+  <object id="10" type="water" x="48" y="128" width="112" height="32"/>
+  <object id="12" type="grass" x="32" y="48" width="112" height="64"/>
+  <object id="13" type="sand" x="32" y="32" width="112" height="16"/>
+  <object id="14" type="mountain" x="16" y="16" width="144" height="16"/>
+  <object id="15" type="mountain" x="16" y="32" width="16" height="96"/>
+  <object id="16" type="mountain" x="32" y="112" width="128" height="16"/>
+  <object id="17" type="mountain" x="144" y="32" width="16" height="80"/>
+ </objectgroup>
+</map>
