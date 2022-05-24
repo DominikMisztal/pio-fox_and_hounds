@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.swing.plaf.ScrollBarUI;
 
 
 public class Board extends ApplicationAdapter implements InputProcessor {
