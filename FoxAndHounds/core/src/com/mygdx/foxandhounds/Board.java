@@ -12,11 +12,16 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
+
+import javax.swing.plaf.ScrollBarUI;
 
 
 public class Board extends ApplicationAdapter implements InputProcessor {
 
     private HashMap<Vector2, Tile> boardTiles;
+    private Fox fox;
+    private Vector<Hound> hounds;
     OrthographicCamera camera;
 
     SpriteBatch sb;
@@ -36,6 +41,11 @@ public class Board extends ApplicationAdapter implements InputProcessor {
             }
         }
         Gdx.input.setInputProcessor(this);
+        fox = new Fox(0, 0);
+        hounds = new Vector<>();
+        for(int i = 0; i < 4; i++){
+            hounds.add(new Hound(0+2*i, 7));
+        }
         sb = new SpriteBatch();
     }
 
@@ -45,11 +55,16 @@ public class Board extends ApplicationAdapter implements InputProcessor {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
-        //sb.begin();
+        
         for(Map.Entry<Vector2, Tile> entry : boardTiles.entrySet()){
             entry.getValue().render(sb);
         }
-        //sb.end();
+        sb.begin();
+        fox.render(sb);
+        for(Hound hound : hounds){
+            hound.render(sb);
+        }
+        sb.end();
 
     }
 
@@ -70,6 +85,7 @@ public class Board extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        System.out.println("X: {"+ screenX+"} Y: {"+ (Gdx.graphics.getHeight() -  screenY)+"}" );
         return false;
     }
 

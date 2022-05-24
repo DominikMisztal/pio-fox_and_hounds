@@ -1,8 +1,6 @@
 package com.mygdx.foxandhounds;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -13,21 +11,19 @@ public class Tile {
     public final static int TILE_SIZE = 100;
     private Vector2 coordinates;
     private Pawn pawn;
-    private Sprite sprite;
     private ShapeRenderer shapeRenderer;
 
     public Tile(int x, int y){
-        // if((x+y)%2 == 0){
-        //     sprite = new Sprite(new Texture(Gdx.files.internal("assets/textures/white.png")));
-        //     //new Texture(Gdx.files.internal("textures/knight.png"));
-        // }
-        // else{
-        //     sprite = new Sprite(new Texture(Gdx.files.internal("assets/textures/black.png")));
-        // }
-
-        // sprite.setPosition(x*64, y*64);
         coordinates = new Vector2(x,y);
         shapeRenderer = new ShapeRenderer();
+    }
+
+    public Pawn getPawn() {
+        return pawn;
+    }
+
+    public void setPawn(Pawn pawn) {
+        this.pawn = pawn;
     }
 
     public void render(SpriteBatch sb){
@@ -44,4 +40,6 @@ public class Tile {
         shapeRenderer.rect(coordinates.x * TILE_SIZE, coordinates.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         shapeRenderer.end();
     }
+
+    
 }
