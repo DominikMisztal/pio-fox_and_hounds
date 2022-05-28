@@ -40,7 +40,7 @@ public class LogoAnimationScreen implements Screen {
         image.setPosition(stage.getWidth() / 2 - 50, stage.getHeight() - 50);
         image.addAction(sequence(alpha(0), scaleTo(.1f, .1f),
                 parallel(fadeIn(2f, Interpolation.pow2),
-                        scaleTo(2f,2f,2.5f, Interpolation.pow5),
+                        scaleTo(1f,1f,2.5f, Interpolation.pow5),
                         moveTo(stage.getWidth() / 2 - 50, stage.getHeight() / 2 - 50, 2f, Interpolation.swing)),
                 delay(0.25f), fadeOut(0.25f), run(setMenuScreen)));
 

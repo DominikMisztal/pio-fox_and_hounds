@@ -28,7 +28,6 @@ public class LoadingScreen implements Screen {
         queueAssets();
     }
     private void queueAssets(){
-        game.assets.load("archery.png", Texture.class);
         game.assets.load("ui/uiskin.atlas", TextureAtlas.class);
     }
 
