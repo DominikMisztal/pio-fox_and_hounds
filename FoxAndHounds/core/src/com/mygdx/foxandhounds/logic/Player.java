@@ -1,6 +1,8 @@
-package com.mygdx.foxandhounds;
+package com.mygdx.foxandhounds.logic;
 
-public class Player {   
+import com.mygdx.foxandhounds.logic.PawnType;
+
+public class Player {
     private PawnType type;
 
     public Player(PawnType type){

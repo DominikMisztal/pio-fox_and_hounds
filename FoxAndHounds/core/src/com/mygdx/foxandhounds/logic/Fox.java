@@ -1,4 +1,4 @@
-package com.mygdx.foxandhounds;
+package com.mygdx.foxandhounds.logic;
 
 public class Fox extends Pawn {
     public Fox( int x, int y){

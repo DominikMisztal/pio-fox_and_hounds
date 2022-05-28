@@ -1,4 +1,4 @@
-package com.mygdx.foxandhounds;
+package com.mygdx.foxandhounds.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.foxandhounds.logic.Pawn;
 
 public class Tile {
     public final static int TILE_SIZE = 100;
