@@ -8,9 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.foxandhounds.logic.Pawn;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class Tile {
+public class Tile extends Actor{
     public final static int TILE_SIZE = 100;
     private Vector2 coordinates;
     private Pawn pawn;
@@ -30,8 +30,7 @@ public class Tile {
         this.pawn = pawn;
     }
 
-    public void render(SpriteBatch sb){
-        //sprite.draw(sb);
+    public void render(){
         shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.identity();
         if( (int)(coordinates.x + coordinates.y) %2 == 1){
@@ -40,7 +39,6 @@ public class Tile {
         else{
             shapeRenderer.setColor(Color.BLACK);
         }
-        //shapeRenderer.translate(coordinates.x * TILE_SIZE, coordinates.y * TILE_SIZE, 0);
         shapeRenderer.rect(coordinates.x * TILE_SIZE, coordinates.y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
         shapeRenderer.end();
     }
@@ -57,6 +55,10 @@ public class Tile {
 
     public void renderBorder(SpriteBatch sb){
         tileBorder.draw(sb);
+    }
+
+    public Vector2 getCoordinates(){
+        return coordinates;
     }
 
 
