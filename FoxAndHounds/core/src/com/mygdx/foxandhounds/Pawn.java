@@ -14,12 +14,11 @@ public class Pawn {
     public Pawn(PawnType pt, int x, int y){
         pawnType = pt;
         if(pawnType == PawnType.HOUND){
-            sprite = new Sprite( new Texture(Gdx.files.internal("textures/dog.png")));
+            sprite = new Sprite( new Texture(Gdx.files.internal("textures/hound.png")));
         }
         else{
-            sprite = new Sprite( new Texture(Gdx.files.internal("textures/fox.jpg")));
+            sprite = new Sprite( new Texture(Gdx.files.internal("textures/fox.png")));
         }
-        sprite.setScale((float)0.1);
         coordinates = new Vector2(x, y);
         //sprite.setOrigin(coordinates.x,coordinates.y);
         sprite.setOrigin(0,0);
