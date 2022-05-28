@@ -3,13 +3,11 @@ package com.mygdx.foxandhounds.screens;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.foxandhounds.FoxAndHounds;
 import com.mygdx.foxandhounds.logic.*;
 
@@ -23,8 +21,8 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
 
     private final FoxAndHounds game;
     private Skin skin;
-    private Stage stage;
     private OrthographicCamera camera;
+    private ShapeRenderer shapeRenderer;
     private HashMap<Vector2, Tile> boardTiles;
     private Fox fox;
     private Vector<Hound> hounds;
@@ -36,7 +34,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
 
     public BoardScreen(FoxAndHounds game){
         this.game = game;
-        this.stage = new Stage(new FitViewport(FoxAndHounds.WIDTH, FoxAndHounds.HEIGHT, game.camera));
+        this.shapeRenderer = new ShapeRenderer();
 
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
@@ -72,7 +70,6 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
-        stage.clear();
 
         this.skin = new Skin();
         this.skin.addRegions(game.assets.get("ui/uiskin.atlas", TextureAtlas.class));
@@ -89,7 +86,6 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         Gdx.gl.glClearColor(0,0,255,1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
         
         for(Map.Entry<Vector2, Tile> entry : boardTiles.entrySet()){
             entry.getValue().render(game.batch);
@@ -109,6 +105,9 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
 
     @Override
     public boolean keyDown(int keycode) {
+        if(keycode == Input.Keys.T){
+            game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
+        }
         if(keycode == Input.Keys.NUM_1){
             currentPlayer = 0;
         }
@@ -242,5 +241,10 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
 
     private Tile getTile(Vector2 coordinates){
         return boardTiles.get(coordinates);
+    }
+
+    @Override
+    public void dispose(){
+        shapeRenderer.dispose();
     }
 }

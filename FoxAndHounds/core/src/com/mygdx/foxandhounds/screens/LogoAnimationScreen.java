@@ -49,7 +49,7 @@ public class LogoAnimationScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(.25f,.25f,.25f,1f);
+        Gdx.gl.glClearColor(.25f,.25f,.25f,0.5f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         update(delta);

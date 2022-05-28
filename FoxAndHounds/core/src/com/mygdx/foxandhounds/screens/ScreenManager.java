@@ -14,7 +14,8 @@ public class ScreenManager {
         ANIMATION,
         MAIN_MENU,
         SETTINGS,
-        PLAY
+        PLAY,
+        ENDGAME
     }
 
     public ScreenManager(final FoxAndHounds game){
@@ -30,6 +31,7 @@ public class ScreenManager {
         this.gameScreens.put(STATE.MAIN_MENU, new MainMenuScreen(game));
         this.gameScreens.put(STATE.SETTINGS, new SettingsScreen(game));
         this.gameScreens.put(STATE.PLAY, new BoardScreen(game));
+        this.gameScreens.put(STATE.ENDGAME, new EndGameScreen(game));
     }
 
     public void setScreen(STATE nextScreen){
