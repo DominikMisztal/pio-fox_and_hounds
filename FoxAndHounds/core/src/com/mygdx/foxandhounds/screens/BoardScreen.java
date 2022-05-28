@@ -1,14 +1,15 @@
-package com.mygdx.foxandhounds;
+package com.mygdx.foxandhounds.screens;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.mygdx.foxandhounds.FoxAndHounds;
+import com.mygdx.foxandhounds.logic.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,25 +17,27 @@ import java.util.Vector;
 
 
 
-public class Board extends ApplicationAdapter implements InputProcessor {
+public class BoardScreen extends ApplicationAdapter implements InputProcessor, Screen {
 
+    private final FoxAndHounds game;
+    private Skin skin;
+    private OrthographicCamera camera;
+    private ShapeRenderer shapeRenderer;
     private HashMap<Vector2, Tile> boardTiles;
     private Fox fox;
     private Vector<Hound> hounds;
-    private OrthographicCamera camera;
     private Vector2 lastClickTile;
     private Vector<Tile> tilesToMoveTo;
     private Pawn currentlySelectedPawn;
     private Vector<Player> players;
     private int currentPlayer;
 
-    SpriteBatch sb;
+    public BoardScreen(FoxAndHounds game){
+        this.game = game;
+        this.shapeRenderer = new ShapeRenderer();
 
-    @Override
-    public void create () {
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
@@ -44,7 +47,6 @@ public class Board extends ApplicationAdapter implements InputProcessor {
                 boardTiles.put(new Vector2(i,j), new Tile(i,j));
             }
         }
-        Gdx.input.setInputProcessor(this);
         fox = new Fox(0, 0);
         Vector2 temp = new Vector2();
         temp.x = 0; temp.y = 0;
@@ -52,45 +54,60 @@ public class Board extends ApplicationAdapter implements InputProcessor {
         Hound hound;
         hounds = new Vector<>();
         for(int i = 0; i < 4; i++){
-            hound = new Hound(1+2*i, 7); 
+            hound = new Hound(1+2*i, 7);
             temp.x = 1+2*i; temp.y = 7;
             getTile(temp).setPawn(hound);
             hounds.add(hound);
         }
-        sb = new SpriteBatch();
         tilesToMoveTo = new Vector<>();
         players = new Vector<>();
         players.add(new Player(PawnType.FOX));
         players.add(new Player(PawnType.HOUND));
         currentPlayer = 0;
-        sb.setProjectionMatrix(camera.combined);
+        game.batch.setProjectionMatrix(camera.combined);
     }
 
     @Override
-    public void render(){
+    public void show() {
+        Gdx.input.setInputProcessor(this);
+
+        this.skin = new Skin();
+        this.skin.addRegions(game.assets.get("ui/uiskin.atlas", TextureAtlas.class));
+        this.skin.add("default-font", game.font);
+        this.skin.load(Gdx.files.internal("ui/uiskin.json"));
+    }
+
+    @Override
+    public void create () {
+    }
+
+    @Override
+    public void render(float delta){
         Gdx.gl.glClearColor(0,0,255,1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        camera.update();
         
         for(Map.Entry<Vector2, Tile> entry : boardTiles.entrySet()){
-            entry.getValue().render(sb);
+            entry.getValue().render(game.batch);
         }
-        sb.begin();
+        game.batch.begin();
         
-        fox.render(sb);
+        fox.render(game.batch);
         for(Hound hound : hounds){
-            hound.render(sb);
+            hound.render(game.batch);
         }
         for(Tile tile : tilesToMoveTo){
-            tile.renderBorder(sb);
+            tile.renderBorder(game.batch);
         }
-        sb.end();
+        game.batch.end();
 
     }
 
     @Override
     public boolean keyDown(int keycode) {
+        if(keycode == Input.Keys.T){
+            game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
+        }
         if(keycode == Input.Keys.NUM_1){
             currentPlayer = 0;
         }
@@ -194,6 +211,11 @@ public class Board extends ApplicationAdapter implements InputProcessor {
     }
 
     @Override
+    public void hide() {
+
+    }
+
+    @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         return false;
     }
@@ -219,5 +241,10 @@ public class Board extends ApplicationAdapter implements InputProcessor {
 
     private Tile getTile(Vector2 coordinates){
         return boardTiles.get(coordinates);
+    }
+
+    @Override
+    public void dispose(){
+        shapeRenderer.dispose();
     }
 }

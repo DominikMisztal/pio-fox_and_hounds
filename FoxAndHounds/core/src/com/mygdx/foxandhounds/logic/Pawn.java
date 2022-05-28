@@ -1,4 +1,4 @@
-package com.mygdx.foxandhounds;
+package com.mygdx.foxandhounds.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -22,7 +22,7 @@ public class Pawn {
         coordinates = new Vector2(x, y);
         //sprite.setOrigin(coordinates.x,coordinates.y);
         sprite.setOrigin(0,0);
-        sprite.setPosition(x*Tile.TILE_SIZE, y*Tile.TILE_SIZE);
+        sprite.setPosition(x* Tile.TILE_SIZE, y*Tile.TILE_SIZE);
         
     }
 

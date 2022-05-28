@@ -1,4 +1,4 @@
-package com.mygdx.foxandhounds;
+package com.mygdx.foxandhounds.logic;
 
 public enum PawnType {
     FOX, HOUND;
