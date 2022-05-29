@@ -48,7 +48,7 @@ public class Tile extends Actor{
             tileBorder = null;
         }
         if(type == 1){
-            tileBorder = new Sprite(new Texture(Gdx.files.internal("assets/textures/GreenFrame.png")));
+            tileBorder = new Sprite(new Texture(Gdx.files.internal("textures/GreenFrame.png")));
             tileBorder.setPosition(TILE_SIZE*coordinates.x, TILE_SIZE*coordinates.y);
         }
     }
