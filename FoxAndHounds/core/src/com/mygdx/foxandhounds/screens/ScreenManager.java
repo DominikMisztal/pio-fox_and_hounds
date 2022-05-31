@@ -13,7 +13,6 @@ public class ScreenManager {
         LOADING,
         ANIMATION,
         MAIN_MENU,
-        SETTINGS,
         PLAY,
         ENDGAME
     }
@@ -29,7 +28,6 @@ public class ScreenManager {
         this.gameScreens.put(STATE.LOADING, new LoadingScreen(game));
         this.gameScreens.put(STATE.ANIMATION, new LogoAnimationScreen(game));
         this.gameScreens.put(STATE.MAIN_MENU, new MainMenuScreen(game));
-        this.gameScreens.put(STATE.SETTINGS, new SettingsScreen(game));
         this.gameScreens.put(STATE.PLAY, new BoardScreen(game));
         this.gameScreens.put(STATE.ENDGAME, new EndGameScreen(game));
     }

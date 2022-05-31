@@ -1,12 +1,16 @@
 package com.mygdx.foxandhounds.screens;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.foxandhounds.FoxAndHounds;
 import com.mygdx.foxandhounds.logic.*;
 
@@ -27,10 +31,14 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     private Vector<Tile> tilesToMoveTo;
     private Pawn currentlySelectedPawn;
     private PawnType currentPlayer;
+    private boolean doDrawing;
+    TextButton helpBuffer;
+    private Stage stage;
 
     
 
     public BoardScreen(FoxAndHounds game){
+        this.stage = new Stage(new FitViewport(FoxAndHounds.WIDTH, FoxAndHounds.HEIGHT, game.camera));
         this.game = game;
         this.shapeRenderer = new ShapeRenderer();
 
@@ -63,12 +71,15 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(this);
         inputMultiplexer.addProcessor(board);
+        inputMultiplexer.addProcessor(stage);
         Gdx.input.setInputProcessor(inputMultiplexer);
+        stage.clear();
 
         this.skin = new Skin();
         this.skin.addRegions(game.assets.get("ui/uiskin.atlas", TextureAtlas.class));
         this.skin.add("default-font", game.font);
         this.skin.load(Gdx.files.internal("ui/uiskin.json"));
+        initHelpBuffer();
     }
 
     @Override
@@ -80,6 +91,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         Gdx.gl.glClearColor(0,0,255,1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        camera.update();
         board.render();
         game.batch.begin();
         
@@ -90,8 +102,22 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         for(Tile tile : tilesToMoveTo){
             tile.renderBorder(game.batch);
         }
-        game.batch.end();
 
+        game.batch.end();
+        if(doDrawing){
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(new Color(0,0,0,0.8f));
+            shapeRenderer.rect(0, 0, game.camera.viewportWidth, game.camera.viewportHeight);
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+            stage.draw();
+        }
+
+    }
+    private void update(float delta){
+        stage.act(delta);
     }
 
     @Override
@@ -104,6 +130,9 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         }
         if(keycode == Input.Keys.NUM_2){
             currentPlayer = PawnType.HOUND;
+        }
+        if(keycode == Input.Keys.ESCAPE){
+            doDrawing = (doDrawing == false) ? true : false;
         }
         return false;
     }
@@ -279,5 +308,26 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     @Override
     public void dispose(){
         shapeRenderer.dispose();
+    }
+
+    private void initHelpBuffer(){
+        helpBuffer = new TextButton("                   Move rules:\n\n" +
+                                        "  Fox      - can move one square in\n" +
+                                        "                every direction\n" +
+                                        "  Hound - can move one square\n" +
+                                        "                only forward\n\n" +
+                                        "                     Win rules:\n\n" +
+                                        "  Fox      - wins by passing\n" +
+                                        "                behind the most hidden\n" +
+                                        "                hound\n" +
+                                        "  Hound - wins when fox is trapped\n" +
+                                        "                and have no available\n" +
+                                        "                moves", skin, "default");
+        helpBuffer.setSize(410,450);
+        helpBuffer.setPosition(FoxAndHounds.WIDTH / 2.0f - 205,FoxAndHounds.HEIGHT / 2.0f - 225);
+        helpBuffer.left();
+        helpBuffer.getLabel().setAlignment(Align.left);
+
+        stage.addActor(helpBuffer);
     }
 }
