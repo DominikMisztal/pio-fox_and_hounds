@@ -114,6 +114,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
             Gdx.gl.glDisable(GL20.GL_BLEND);
             stage.draw();
         }
+        update(delta);
 
     }
     private void update(float delta){

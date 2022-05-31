@@ -61,7 +61,7 @@ public class EndGameScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         game.batch.begin();
-        game.font.draw(game.batch, endText, Gdx.graphics.getWidth()*.25f, Gdx.graphics.getHeight() * .75f);
+        game.font.draw(game.batch, endText, FoxAndHounds.WIDTH / 2f - 75, Gdx.graphics.getHeight() * .75f);
         game.batch.end();
 
         update(delta);
