@@ -20,8 +20,8 @@ public class EndGameScreen implements Screen, InputProcessor {
 
     final FoxAndHounds game;
     private Skin skin;
-    private Stage stage;
-    private ShapeRenderer shapeRenderer;
+    private final Stage stage;
+    private final ShapeRenderer shapeRenderer;
     String endText;
 
     TextButton playButton;

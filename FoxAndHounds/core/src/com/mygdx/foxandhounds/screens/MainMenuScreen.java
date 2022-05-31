@@ -19,8 +19,8 @@ public class MainMenuScreen implements Screen, InputProcessor {
 
     final FoxAndHounds game;
     private Skin skin;
-    private Stage stage;
-    private ShapeRenderer shapeRenderer;
+    private final Stage stage;
+    private final ShapeRenderer shapeRenderer;
 
     TextButton playButton;
     TextButton exitButton;

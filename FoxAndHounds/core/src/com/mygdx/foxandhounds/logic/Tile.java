@@ -12,9 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Tile extends Actor{
     public final static int TILE_SIZE = 100;
-    private Vector2 coordinates;
+    private final Vector2 coordinates;
     private Pawn pawn;
-    private ShapeRenderer shapeRenderer;
+    private final ShapeRenderer shapeRenderer;
     private Sprite tileBorder;
 
     public Tile(int x, int y){

@@ -14,9 +14,8 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 
 public class LogoAnimationScreen implements Screen {
-    private FoxAndHounds game;
-    private Stage stage;
-    private Image image;
+    private final FoxAndHounds game;
+    private final Stage stage;
 
     public LogoAnimationScreen(final FoxAndHounds game){
         this.game = game;
@@ -35,7 +34,7 @@ public class LogoAnimationScreen implements Screen {
         };
 
         Texture texture = new Texture(Gdx.files.internal("textures/fox.png"));
-        image = new Image(texture);
+        Image image = new Image(texture);
         image.setOrigin(image.getWidth() / 2, image.getHeight() / 2);
         image.setPosition(stage.getWidth() / 2 - 50, stage.getHeight() - 50);
         image.addAction(sequence(alpha(0), scaleTo(.1f, .1f),

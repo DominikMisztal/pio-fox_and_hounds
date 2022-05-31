@@ -11,7 +11,7 @@ import com.mygdx.foxandhounds.FoxAndHounds;
 
 public class LoadingScreen implements Screen {
     private final FoxAndHounds game;
-    private ShapeRenderer shapeRenderer;
+    private final ShapeRenderer shapeRenderer;
     private float progress;
 
 

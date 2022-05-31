@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class Pawn {
-    private PawnType pawnType;
-    private Sprite sprite;
-    private Vector2 coordinates;
+    private final PawnType pawnType;
+    private final Sprite sprite;
+    private final Vector2 coordinates;
 
     public Pawn(PawnType pt, int x, int y){
         pawnType = pt;

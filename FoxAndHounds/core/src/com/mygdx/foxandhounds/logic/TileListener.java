@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.mygdx.foxandhounds.screens.BoardScreen;
 
 public class TileListener extends ClickListener {
-    private Tile tile;
-    private BoardScreen boardScreen;
+    private final Tile tile;
+    private final BoardScreen boardScreen;
 
     public TileListener(Tile tile, BoardScreen bs){
         boardScreen = bs;

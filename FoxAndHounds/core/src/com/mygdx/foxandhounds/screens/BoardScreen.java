@@ -20,20 +20,20 @@ import java.util.Vector;
 
 public class BoardScreen extends ApplicationAdapter implements InputProcessor, Screen {
 
-    private Board board;
+    private final Board board;
     private final FoxAndHounds game;
     private Skin skin;
-    private OrthographicCamera camera;
-    private ShapeRenderer shapeRenderer;
-    private Fox fox;
-    private Vector<Hound> hounds;
+    private final OrthographicCamera camera;
+    private final ShapeRenderer shapeRenderer;
+    private final Fox fox;
+    private final Vector<Hound> hounds;
     private Tile currentTile;
-    private Vector<Tile> tilesToMoveTo;
+    private final Vector<Tile> tilesToMoveTo;
     private Pawn currentlySelectedPawn;
     private PawnType currentPlayer;
     private boolean doDrawing;
     TextButton helpBuffer;
-    private Stage stage;
+    private final Stage stage;
 
     
 
@@ -245,7 +245,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         Vector2 temp = new Vector2(0,0);
         board.getTile(fox.getCoordinates()).setPawn(null);
         fox.changePosition(0, 0);
-        board.getTile(temp).setPawn(fox);;
+        board.getTile(temp).setPawn(fox);
         for(int i = 0; i < 4; i++){
             temp.x = 1+2*i; temp.y = 7;
             board.getTile(hounds.get(i).getCoordinates()).setPawn(null);

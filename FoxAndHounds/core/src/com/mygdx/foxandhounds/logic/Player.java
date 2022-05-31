@@ -1,7 +1,7 @@
 package com.mygdx.foxandhounds.logic;
 
 public class Player {
-    private PawnType type;
+    private final PawnType type;
 
     public Player(PawnType type){
         this.type = type;
