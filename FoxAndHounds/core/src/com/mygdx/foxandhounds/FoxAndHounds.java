@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.mygdx.foxandhounds.logic.PawnType;
 import com.mygdx.foxandhounds.screens.ScreenManager;
 
 public class FoxAndHounds extends Game {
@@ -20,6 +21,7 @@ public class FoxAndHounds extends Game {
     public ScreenManager screenManager;
     public OrthographicCamera camera;
     public AssetManager assets;
+    public PawnType winner;
 
     public void create(){
         assets = new AssetManager();

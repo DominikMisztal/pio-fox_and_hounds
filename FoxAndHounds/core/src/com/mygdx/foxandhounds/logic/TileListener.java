@@ -33,6 +33,7 @@ public class TileListener extends ClickListener {
                 else{
                     boardScreen.findMovesHound();
                 }
+                boardScreen.setBorders();
             }
         }
     }

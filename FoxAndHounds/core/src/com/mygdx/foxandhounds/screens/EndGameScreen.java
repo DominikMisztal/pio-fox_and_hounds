@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.mygdx.foxandhounds.FoxAndHounds;
+import com.mygdx.foxandhounds.logic.PawnType;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -21,6 +22,7 @@ public class EndGameScreen implements Screen, InputProcessor {
     private Skin skin;
     private Stage stage;
     private ShapeRenderer shapeRenderer;
+    String endText;
 
     TextButton playButton;
     TextButton exitButton;
@@ -35,7 +37,12 @@ public class EndGameScreen implements Screen, InputProcessor {
     public void show() {
         Gdx.input.setInputProcessor(stage);
         stage.clear();
-
+        if(game.winner == PawnType.FOX){
+            endText = "Fox is the winner!";
+        }
+        else{
+            endText = "Hound is the winner!";
+        }
         this.skin = new Skin();
         this.skin.addRegions(game.assets.get("ui/uiskin.atlas", TextureAtlas.class));
         this.skin.add("default-font", game.font);
@@ -50,8 +57,12 @@ public class EndGameScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1f,1f,1f,1f);
+        Gdx.gl.glClearColor(0f,0f,0f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        game.batch.begin();
+        game.font.draw(game.batch, endText, Gdx.graphics.getWidth()*.25f, Gdx.graphics.getHeight() * .75f);
+        game.batch.end();
 
         update(delta);
         stage.draw();

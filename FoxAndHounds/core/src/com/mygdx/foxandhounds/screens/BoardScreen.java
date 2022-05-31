@@ -130,25 +130,21 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         tile = board.getTile(temp);
         if(tile != null && tile.getPawn() == null){
             tilesToMoveTo.add(tile);
-            tile.setBorder(1);
         }
         temp.x = currentlySelectedPawn.getCoordinates().x+1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
         tile = board.getTile(temp);
         if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);
-            tile.setBorder(1);
+            tilesToMoveTo.add(tile);          
         }
         temp.x = currentlySelectedPawn.getCoordinates().x-1; temp.y = currentlySelectedPawn.getCoordinates().y+1;
         tile = board.getTile(temp);
         if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);
-            tile.setBorder(1);
+            tilesToMoveTo.add(tile);           
         }
         temp.x = currentlySelectedPawn.getCoordinates().x+1; temp.y = currentlySelectedPawn.getCoordinates().y+1;
         tile = board.getTile(temp);
         if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);
-            tile.setBorder(1);
+            tilesToMoveTo.add(tile);           
         }
     }
 
@@ -158,13 +154,17 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         temp.x = currentlySelectedPawn.getCoordinates().x-1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
         tile = board.getTile(temp);
         if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);
-            tile.setBorder(1);
+            tilesToMoveTo.add(tile);    
         }
         temp.x = currentlySelectedPawn.getCoordinates().x+1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
         tile = board.getTile(temp);
         if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);
+            tilesToMoveTo.add(tile);     
+        }
+    }
+
+    public void setBorders(){
+        for(Tile tile : tilesToMoveTo){
             tile.setBorder(1);
         }
     }
@@ -207,13 +207,37 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         prevTile.setPawn(null);
         changePlayers();
         checkWinCondition();
+        clearMoves();
+        
     }
     
+    public void resetBoard(){
+        Vector2 temp = new Vector2(0,0);
+        board.getTile(fox.getCoordinates()).setPawn(null);
+        fox.changePosition(0, 0);
+        board.getTile(temp).setPawn(fox);;
+        for(int i = 0; i < 4; i++){
+            temp.x = 1+2*i; temp.y = 7;
+            board.getTile(hounds.get(i).getCoordinates()).setPawn(null);
+            hounds.get(i).changePosition((int)temp.x, (int)temp.y);  
+            board.getTile(temp).setPawn(hounds.get(i));
+        }
+        currentPlayer = PawnType.FOX;
+    }
+
     public void checkWinCondition(){
         Vector2 temp = fox.getCoordinates();
+        findMovesFox();
         if(temp.equals(new Vector2(1,7)) || temp.equals(new Vector2(3,7))
             || temp.equals(new Vector2(5,7)) || temp.equals(new Vector2(7,7))){
-
+            game.winner = PawnType.FOX;
+            game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
+            resetBoard();
+        }
+        else if(tilesToMoveTo.isEmpty()){
+            game.winner  = PawnType.HOUND;
+            game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
+            resetBoard();
         }
     }
 
@@ -251,7 +275,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     public Pawn getCurrentPawn(){
         return currentlySelectedPawn;
     }
-    
+
     @Override
     public void dispose(){
         shapeRenderer.dispose();
