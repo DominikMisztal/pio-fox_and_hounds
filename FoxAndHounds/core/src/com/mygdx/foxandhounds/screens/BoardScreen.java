@@ -4,15 +4,23 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.foxandhounds.FoxAndHounds;
 import com.mygdx.foxandhounds.logic.*;
+import sun.font.TrueTypeFont;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 import java.util.Vector;
 
@@ -33,10 +41,13 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     private PawnType currentPlayer;
     private boolean doDrawing;
     private final Stage stage;
+    FreeTypeFontGenerator generator;
+
 
     
 
     public BoardScreen(FoxAndHounds game){
+        this.generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Arcon.ttf"));
         this.stage = new Stage(new FitViewport(FoxAndHounds.WIDTH, FoxAndHounds.HEIGHT, game.camera));
         this.game = game;
         this.shapeRenderer = new ShapeRenderer();
@@ -69,8 +80,8 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     public void show() {
         InputMultiplexer inputMultiplexer = new InputMultiplexer();
         inputMultiplexer.addProcessor(this);
-        inputMultiplexer.addProcessor(board);
         inputMultiplexer.addProcessor(stage);
+        inputMultiplexer.addProcessor(board);
         Gdx.input.setInputProcessor(inputMultiplexer);
         stage.clear();
 
@@ -81,7 +92,8 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         if (game.resetBoard){
             resetBoard();
         }
-        initHelpBuffer();
+
+        initButtons();
     }
 
     @Override
@@ -96,7 +108,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         camera.update();
         board.render();
         game.batch.begin();
-        
+
         fox.render(game.batch);
         for(Hound hound : hounds){
             hound.render(game.batch);
@@ -106,17 +118,12 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         }
 
         game.batch.end();
+
         if(doDrawing){
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(new Color(0,0,0,0.8f));
-            shapeRenderer.rect(0, 0, game.camera.viewportWidth, game.camera.viewportHeight);
-            shapeRenderer.end();
-            Gdx.gl.glDisable(GL20.GL_BLEND);
+            displayPause();
+            update(delta);
             stage.draw();
         }
-        update(delta);
 
     }
     private void update(float delta){
@@ -299,10 +306,24 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     @Override
     public void dispose(){
         shapeRenderer.dispose();
+        stage.dispose();
     }
 
-    private void initHelpBuffer(){
-        TextButton helpBuffer = new TextButton("                   Move rules:\n\n" +
+    private void displayPause(){
+        int HELP_BUFFER_WIDTH = 410;
+        int HELP_BUFFER_HEIGHT = 460;
+
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(0,0,0,0.8f));
+        shapeRenderer.rect(0, 0, game.camera.viewportWidth, game.camera.viewportHeight);
+        shapeRenderer.setColor(new Color(Color.GRAY));
+        shapeRenderer.rect(FoxAndHounds.WIDTH / 2f - HELP_BUFFER_WIDTH / 2f, FoxAndHounds.HEIGHT / 2.0f - HELP_BUFFER_HEIGHT / 2f, HELP_BUFFER_WIDTH, HELP_BUFFER_HEIGHT);
+        shapeRenderer.end();
+        game.batch.begin();
+        game.font.setColor(Color.WHITE);
+        game.font.draw(game.batch, "                   Move rules:\n\n" +
                 "  Fox      - can move one square in\n" +
                 "                every direction\n" +
                 "  Hound - can move one square\n" +
@@ -313,12 +334,45 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
                 "                hound\n" +
                 "  Hound - wins when fox is trapped\n" +
                 "                and have no available\n" +
-                "                moves", skin, "default");
-        helpBuffer.setSize(410,450);
-        helpBuffer.setPosition(FoxAndHounds.WIDTH / 2.0f - 205,FoxAndHounds.HEIGHT / 2.0f - 225);
-        helpBuffer.left();
-        helpBuffer.getLabel().setAlignment(Align.left);
+                "                moves", HELP_BUFFER_WIDTH / 2f,FoxAndHounds.HEIGHT / 2f + HELP_BUFFER_HEIGHT / 2f - 10);
+        game.batch.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+    }
+    private void initButtons(){
+        int HELP_BUFFER_WIDTH = 410;
+        int HELP_BUFFER_HEIGHT = 460;
+        int RESUME_BUTTON_WIDTH = HELP_BUFFER_WIDTH/2;
+        int RESUME_BUTTON_HEIGHT = 50;
+        int EXIT_BUTTON_WIDTH = HELP_BUFFER_WIDTH/2;
+        int EXIT_BUTTON_HEIGHT = 50;
 
-        stage.addActor(helpBuffer);
+        TextButton resumeButton = new TextButton("Resume", skin, "default");
+        resumeButton.setSize(RESUME_BUTTON_WIDTH,RESUME_BUTTON_HEIGHT);
+        resumeButton.setPosition(FoxAndHounds.WIDTH / 2f - 205,FoxAndHounds.HEIGHT / 2.0f - (HELP_BUFFER_HEIGHT / 2f + RESUME_BUTTON_HEIGHT / 2f));
+        resumeButton.addAction(sequence(alpha(0), parallel(fadeIn(.5f),
+                moveBy(0,-20,.5f, Interpolation.pow5Out))));
+        resumeButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                doDrawing = !doDrawing;
+                game.screenManager.setScreen(ScreenManager.STATE.PLAY);
+            }
+        });
+
+        TextButton exitButton = new TextButton("Exit", skin, "default");
+        exitButton.setSize(EXIT_BUTTON_WIDTH,EXIT_BUTTON_HEIGHT);
+        exitButton.setPosition(FoxAndHounds.WIDTH / 2.0f,FoxAndHounds.HEIGHT / 2.0f - (HELP_BUFFER_HEIGHT / 2f + EXIT_BUTTON_HEIGHT / 2f));
+        exitButton.addAction(sequence(alpha(0), parallel(fadeIn(.5f),
+                moveBy(0,-20,.5f, Interpolation.pow5Out))));
+        exitButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Gdx.app.exit();
+            }
+        });
+
+
+        stage.addActor(resumeButton);
+        stage.addActor(exitButton);
     }
 }
