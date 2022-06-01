@@ -6,12 +6,11 @@ import java.util.Map;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.mygdx.foxandhounds.screens.BoardScreen;
 
 public class Board extends Stage {
     private final HashMap<Vector2, Tile> boardTiles;
 
-    public Board(BoardScreen bs){
+    public Board(GameLogicHandler logicHandler){
         boardTiles = new HashMap<>();
         Tile tile;
         for(int i = 0; i < 8; i++){
@@ -20,7 +19,7 @@ public class Board extends Stage {
                 boardTiles.put(new Vector2(j,i), tile);
                 tile.setBounds(Tile.TILE_SIZE*j, Tile.TILE_SIZE *  i, Tile.TILE_SIZE, Tile.TILE_SIZE);
                 addActor(tile);
-                EventListener eventListener = new TileListener(tile, bs);
+                EventListener eventListener = new TileListener(tile, logicHandler);
                 tile.addListener(eventListener);
             }
         }

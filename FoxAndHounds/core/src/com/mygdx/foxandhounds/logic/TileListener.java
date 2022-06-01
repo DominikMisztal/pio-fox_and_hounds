@@ -2,38 +2,37 @@ package com.mygdx.foxandhounds.logic;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.mygdx.foxandhounds.screens.BoardScreen;
 
 public class TileListener extends ClickListener {
     private final Tile tile;
-    private final BoardScreen boardScreen;
+    private final GameLogicHandler logicHandler;
 
-    public TileListener(Tile tile, BoardScreen bs){
-        boardScreen = bs;
+    public TileListener(Tile tile, GameLogicHandler logicHandler){
         this.tile = tile;
+        this.logicHandler = logicHandler;
     }
 
     @Override
     public void clicked(InputEvent event, float x, float y){
-        Tile temp = boardScreen.getCurrentTile();
-        boardScreen.setCurrentTile(tile);
-        if(boardScreen.checkValidMove(tile)){
-            boardScreen.movePawn(temp, tile);
-            boardScreen.setCurrentPawn(null);
+        Tile temp = logicHandler.getCurrentTile();
+        logicHandler.setCurrentTile(tile);
+        if(logicHandler.checkValidMove(tile)){
+            logicHandler.movePawn(temp, tile);
+            logicHandler.setCurrentPawn(null);
             return;
         }
-        boardScreen.clearMoves();
-        boardScreen.setCurrentPawn(null);
+        logicHandler.clearMoves();
+        logicHandler.setCurrentPawn(null);
         if(tile.getPawn() != null){
-            if(tile.getPawn().getPawnType() == boardScreen.getCurrentPlayer()){
-                boardScreen.setCurrentPawn(tile.getPawn()); 
+            if(tile.getPawn().getPawnType() == logicHandler.getCurrentPlayer()){
+                logicHandler.setCurrentPawn(tile.getPawn()); 
                 if(tile.getPawn().getPawnType() == PawnType.FOX){
-                    boardScreen.findMovesFox();
+                    logicHandler.findMovesFox();
                 }
                 else{
-                    boardScreen.findMovesHound();
+                    logicHandler.findMovesHound();
                 }
-                boardScreen.setBorders();
+                logicHandler.setBorders();
             }
         }
     }

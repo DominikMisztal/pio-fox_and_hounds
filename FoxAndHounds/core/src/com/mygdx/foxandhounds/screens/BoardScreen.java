@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
@@ -32,12 +31,9 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     private final ShapeRenderer shapeRenderer;
     private final Fox fox;
     private final Vector<Hound> hounds;
-    private Tile currentTile;
-    private final Vector<Tile> tilesToMoveTo;
-    private Pawn currentlySelectedPawn;
-    private PawnType currentPlayer;
     private boolean doDrawing;
     private final Stage stage;
+    private GameLogicHandler logicHandler;
 
 
     
@@ -46,13 +42,13 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         this.stage = new Stage(new FitViewport(FoxAndHounds.WIDTH, FoxAndHounds.HEIGHT, game.camera));
         this.game = game;
         this.shapeRenderer = new ShapeRenderer();
-
+        logicHandler = new GameLogicHandler();
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
-        board = new Board(this);
+        board = new Board(logicHandler);
         board.getViewport().setCamera(camera);
         fox = new Fox(0, 0);
         Vector2 temp = new Vector2();
@@ -66,8 +62,9 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
             board.getTile(temp).setPawn(hound);
             hounds.add(hound);
         }
-        tilesToMoveTo = new Vector<>();
-        currentPlayer = PawnType.FOX;
+
+        logicHandler.setVariables(board, game, fox, hounds);
+        
         game.batch.setProjectionMatrix(camera.combined);
     }
 
@@ -85,7 +82,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         this.skin.add("default-font", game.font);
         this.skin.load(Gdx.files.internal("ui/uiskin.json"));
         if (game.resetBoard){
-            resetBoard();
+            logicHandler.resetBoard();
         }
 
         initButtons();
@@ -108,7 +105,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         for(Hound hound : hounds){
             hound.render(game.batch);
         }
-        for(Tile tile : tilesToMoveTo){
+        for(Tile tile : logicHandler.tilesToMoveTo){
             tile.renderBorder(game.batch);
         }
 
@@ -121,6 +118,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         }
 
     }
+    
     private void update(float delta){
         stage.act(delta);
     }
@@ -148,52 +146,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         return false;
     }
 
-    public void findMovesFox(){
-        Vector2 temp = new Vector2();
-        Tile tile;
-        temp.x = currentlySelectedPawn.getCoordinates().x-1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);
-        }
-        temp.x = currentlySelectedPawn.getCoordinates().x+1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);          
-        }
-        temp.x = currentlySelectedPawn.getCoordinates().x-1; temp.y = currentlySelectedPawn.getCoordinates().y+1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);           
-        }
-        temp.x = currentlySelectedPawn.getCoordinates().x+1; temp.y = currentlySelectedPawn.getCoordinates().y+1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);           
-        }
-    }
-
-    public void findMovesHound(){
-        Vector2 temp = new Vector2();
-        Tile tile;
-        temp.x = currentlySelectedPawn.getCoordinates().x-1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);    
-        }
-        temp.x = currentlySelectedPawn.getCoordinates().x+1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);     
-        }
-    }
-
-    public void setBorders(){
-        for(Tile tile : tilesToMoveTo){
-            tile.setBorder(1);
-        }
-    }
-
+    
     @Override
     public void hide() {
 
@@ -217,85 +170,6 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     @Override
     public boolean scrolled(float amountX, float amountY) {
         return false;
-    }
-
-    public void clearMoves(){
-        tilesToMoveTo.clear();
-    }
-
-    public void movePawn(Tile prevTile, Tile newTile){
-        clearMoves();
-        System.out.println("moving from: " + prevTile.getCoordinates());
-        System.out.println("moving to: " + newTile.getCoordinates());
-        currentlySelectedPawn.changePosition((int)newTile.getCoordinates().x, (int)newTile.getCoordinates().y);
-        newTile.setPawn(currentlySelectedPawn);
-        prevTile.setPawn(null);
-        changePlayers();
-        checkWinCondition();
-        clearMoves();
-    }
-    
-    public void resetBoard(){
-        Vector2 temp = new Vector2(0,0);
-        board.getTile(fox.getCoordinates()).setPawn(null);
-        fox.changePosition(0, 0);
-        board.getTile(temp).setPawn(fox);
-        for(int i = 0; i < 4; i++){
-            temp.x = 1+2*i; temp.y = 7;
-            board.getTile(hounds.get(i).getCoordinates()).setPawn(null);
-            hounds.get(i).changePosition((int)temp.x, (int)temp.y);  
-            board.getTile(temp).setPawn(hounds.get(i));
-        }
-        currentPlayer = PawnType.FOX;
-        game.resetBoard = false;
-    }
-
-    public void checkWinCondition(){
-        Vector2 temp = fox.getCoordinates();
-        Pawn tempPawn = currentlySelectedPawn;
-        currentlySelectedPawn = fox;
-        findMovesFox();
-        if(temp.equals(new Vector2(1,7)) || temp.equals(new Vector2(3,7))
-            || temp.equals(new Vector2(5,7)) || temp.equals(new Vector2(7,7))){
-            game.winner = PawnType.FOX;
-            game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
-        }
-        else if(tilesToMoveTo.isEmpty()){
-            game.winner  = PawnType.HOUND;
-            game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
-        }
-        currentlySelectedPawn = tempPawn;
-    }
-
-    public void changePlayers(){
-        if(currentPlayer == PawnType.FOX){
-            currentPlayer = PawnType.HOUND;
-        }
-        else{
-            currentPlayer = PawnType.FOX;
-        }
-    }
-
-    public boolean checkValidMove(Tile tile){
-        if(tilesToMoveTo.contains(tile)){
-            return true;
-        }
-        return false;
-    }
-    public Tile getCurrentTile(){
-        return currentTile;
-    }
-
-    public void setCurrentTile(Tile tile){
-        currentTile = tile;
-    }
-
-    public PawnType getCurrentPlayer(){
-        return currentPlayer;
-    }
-
-    public void setCurrentPawn(Pawn pawn){
-        currentlySelectedPawn = pawn;
     }
 
     @Override
@@ -333,6 +207,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         game.batch.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
     }
+    
     private void initButtons(){
         int HELP_BUFFER_WIDTH = 410;
         int HELP_BUFFER_HEIGHT = 460;
@@ -370,4 +245,5 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         stage.addActor(resumeButton);
         stage.addActor(exitButton);
     }
+
 }
