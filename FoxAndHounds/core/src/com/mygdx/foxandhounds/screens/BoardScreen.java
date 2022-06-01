@@ -4,7 +4,6 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -14,11 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.foxandhounds.FoxAndHounds;
 import com.mygdx.foxandhounds.logic.*;
-import sun.font.TrueTypeFont;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
@@ -41,13 +38,11 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     private PawnType currentPlayer;
     private boolean doDrawing;
     private final Stage stage;
-    FreeTypeFontGenerator generator;
 
 
     
 
     public BoardScreen(FoxAndHounds game){
-        this.generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Arcon.ttf"));
         this.stage = new Stage(new FitViewport(FoxAndHounds.WIDTH, FoxAndHounds.HEIGHT, game.camera));
         this.game = game;
         this.shapeRenderer = new ShapeRenderer();
