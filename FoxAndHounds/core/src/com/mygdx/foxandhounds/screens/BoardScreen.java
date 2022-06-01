@@ -262,7 +262,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
             game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
             resetBoard();
         }
-        currentlySelectedPawn = fox;
+        currentlySelectedPawn = tempPawn;
     }
 
     public void changePlayers(){
