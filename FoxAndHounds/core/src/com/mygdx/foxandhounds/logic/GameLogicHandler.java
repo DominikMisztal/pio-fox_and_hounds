@@ -16,11 +16,13 @@ public class GameLogicHandler {
     private Pawn currentlySelectedPawn;
     private PawnType currentPlayer;
     private int highestHoundPos;
+    public boolean gamePaused;
 
     public GameLogicHandler(){
         tilesToMoveTo = new Vector<>();
         currentPlayer = PawnType.FOX;
         highestHoundPos = 7;
+        gamePaused = false;
     }
 
     public void setVariables(Board board, FoxAndHounds game, Fox fox, Vector<Hound> hounds){

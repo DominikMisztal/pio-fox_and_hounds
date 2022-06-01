@@ -14,6 +14,9 @@ public class TileListener extends ClickListener {
 
     @Override
     public void clicked(InputEvent event, float x, float y){
+        if(logicHandler.gamePaused){
+            return;
+        }
         Tile temp = logicHandler.getCurrentTile();
         logicHandler.setCurrentTile(tile);
         if(logicHandler.checkValidMove(tile)){

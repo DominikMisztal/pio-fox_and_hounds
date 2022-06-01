@@ -125,6 +125,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.ESCAPE){
             doDrawing = !doDrawing;
+            logicHandler.gamePaused = doDrawing;
         }
         return false;
     }
@@ -223,7 +224,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
             @Override
             public void clicked(InputEvent event, float x, float y){
                 doDrawing = !doDrawing;
-                game.screenManager.setScreen(ScreenManager.STATE.PLAY);
+                logicHandler.gamePaused = doDrawing;
             }
         });
 
