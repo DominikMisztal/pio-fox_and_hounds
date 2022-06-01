@@ -22,9 +22,6 @@ public class MainMenuScreen implements Screen, InputProcessor {
     private final Stage stage;
     private final ShapeRenderer shapeRenderer;
 
-    TextButton playButton;
-    TextButton exitButton;
-
     public MainMenuScreen(final FoxAndHounds game) {
         this.game = game;
         this.stage = new Stage(new FillViewport(FoxAndHounds.WIDTH, FoxAndHounds.HEIGHT, game.camera));
@@ -125,7 +122,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
     }
 
     private void initButtons(){
-        playButton = new TextButton("Play", skin, "default");
+        TextButton playButton = new TextButton("Play", skin, "default");
         playButton.setSize(300,100);
         playButton.setPosition(FoxAndHounds.WIDTH / 2f - 150f,FoxAndHounds.HEIGHT/ 2f + 60);
         playButton.addAction(sequence(alpha(0), parallel(fadeIn(.5f),
@@ -137,7 +134,7 @@ public class MainMenuScreen implements Screen, InputProcessor {
             }
         });
 
-        exitButton = new TextButton("Exit", skin, "default");
+        TextButton exitButton = new TextButton("Exit", skin, "default");
         exitButton.setSize(300,100);
         exitButton.setPosition(FoxAndHounds.WIDTH / 2f - 150f,FoxAndHounds.HEIGHT/ 2f - 60);
         exitButton.addAction(sequence(alpha(0), parallel(fadeIn(.5f),
@@ -152,8 +149,4 @@ public class MainMenuScreen implements Screen, InputProcessor {
         stage.addActor(playButton);
         stage.addActor(exitButton);
     }
-
-
-    //...Rest of class omitted for succinctness.
-
 }

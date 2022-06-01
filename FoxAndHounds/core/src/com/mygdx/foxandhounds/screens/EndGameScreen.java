@@ -22,10 +22,7 @@ public class EndGameScreen implements Screen, InputProcessor {
     private Skin skin;
     private final Stage stage;
     private final ShapeRenderer shapeRenderer;
-    String endText;
-
-    TextButton playButton;
-    TextButton exitButton;
+    private String endText;
 
     public EndGameScreen(final FoxAndHounds game) {
         this.game = game;
@@ -136,7 +133,7 @@ public class EndGameScreen implements Screen, InputProcessor {
     }
 
     private void initButtons(){
-        playButton = new TextButton("Restart game", skin, "default");
+        TextButton playButton = new TextButton("Restart game", skin, "default");
         playButton.setSize(300,100);
         playButton.setPosition(FoxAndHounds.WIDTH / 2f - 150f,FoxAndHounds.HEIGHT/ 2f + 60);
         playButton.addAction(sequence(alpha(0), parallel(fadeIn(.5f),
@@ -149,7 +146,7 @@ public class EndGameScreen implements Screen, InputProcessor {
             }
         });
 
-        exitButton = new TextButton("Exit game", skin, "default");
+        TextButton exitButton = new TextButton("Exit game", skin, "default");
         exitButton.setSize(300,100);
         exitButton.setPosition(FoxAndHounds.WIDTH / 2f - 150f,FoxAndHounds.HEIGHT/ 2f - 60);
         exitButton.addAction(sequence(alpha(0), parallel(fadeIn(.5f),
@@ -165,7 +162,5 @@ public class EndGameScreen implements Screen, InputProcessor {
         stage.addActor(exitButton);
     }
 
-
-    //...Rest of class omitted for succinctness.
 
 }

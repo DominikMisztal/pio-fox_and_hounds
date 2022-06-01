@@ -32,7 +32,6 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     private Pawn currentlySelectedPawn;
     private PawnType currentPlayer;
     private boolean doDrawing;
-    TextButton helpBuffer;
     private final Stage stage;
 
     
@@ -79,7 +78,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         this.skin.addRegions(game.assets.get("ui/uiskin.atlas", TextureAtlas.class));
         this.skin.add("default-font", game.font);
         this.skin.load(Gdx.files.internal("ui/uiskin.json"));
-        if (game.resetBoard == true){
+        if (game.resetBoard){
             resetBoard();
         }
         initHelpBuffer();
@@ -232,7 +231,6 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         changePlayers();
         checkWinCondition();
         clearMoves();
-        
     }
     
     public void resetBoard(){
@@ -298,28 +296,24 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         currentlySelectedPawn = pawn;
     }
 
-    public Pawn getCurrentPawn(){
-        return currentlySelectedPawn;
-    }
-
     @Override
     public void dispose(){
         shapeRenderer.dispose();
     }
 
     private void initHelpBuffer(){
-        helpBuffer = new TextButton("                   Move rules:\n\n" +
-                                        "  Fox      - can move one square in\n" +
-                                        "                every direction\n" +
-                                        "  Hound - can move one square\n" +
-                                        "                only forward\n\n" +
-                                        "                     Win rules:\n\n" +
-                                        "  Fox      - wins by passing\n" +
-                                        "                behind the most hidden\n" +
-                                        "                hound\n" +
-                                        "  Hound - wins when fox is trapped\n" +
-                                        "                and have no available\n" +
-                                        "                moves", skin, "default");
+        TextButton helpBuffer = new TextButton("                   Move rules:\n\n" +
+                "  Fox      - can move one square in\n" +
+                "                every direction\n" +
+                "  Hound - can move one square\n" +
+                "                only forward\n\n" +
+                "                     Win rules:\n\n" +
+                "  Fox      - wins by passing\n" +
+                "                behind the most hidden\n" +
+                "                hound\n" +
+                "  Hound - wins when fox is trapped\n" +
+                "                and have no available\n" +
+                "                moves", skin, "default");
         helpBuffer.setSize(410,450);
         helpBuffer.setPosition(FoxAndHounds.WIDTH / 2.0f - 205,FoxAndHounds.HEIGHT / 2.0f - 225);
         helpBuffer.left();

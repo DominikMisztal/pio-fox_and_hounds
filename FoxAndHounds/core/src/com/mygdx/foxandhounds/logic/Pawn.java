@@ -20,7 +20,6 @@ public class Pawn {
             sprite = new Sprite( new Texture(Gdx.files.internal("textures/fox.png")));
         }
         coordinates = new Vector2(x, y);
-        //sprite.setOrigin(coordinates.x,coordinates.y);
         sprite.setOrigin(0,0);
         sprite.setPosition(x* Tile.TILE_SIZE, y*Tile.TILE_SIZE);
         
