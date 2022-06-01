@@ -79,6 +79,9 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         this.skin.addRegions(game.assets.get("ui/uiskin.atlas", TextureAtlas.class));
         this.skin.add("default-font", game.font);
         this.skin.load(Gdx.files.internal("ui/uiskin.json"));
+        if (game.resetBoard == true){
+            resetBoard();
+        }
         initHelpBuffer();
     }
 
@@ -244,6 +247,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
             board.getTile(temp).setPawn(hounds.get(i));
         }
         currentPlayer = PawnType.FOX;
+        game.resetBoard = false;
     }
 
     public void checkWinCondition(){
@@ -255,12 +259,10 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
             || temp.equals(new Vector2(5,7)) || temp.equals(new Vector2(7,7))){
             game.winner = PawnType.FOX;
             game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
-            resetBoard();
         }
         else if(tilesToMoveTo.isEmpty()){
             game.winner  = PawnType.HOUND;
             game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
-            resetBoard();
         }
         currentlySelectedPawn = tempPawn;
     }

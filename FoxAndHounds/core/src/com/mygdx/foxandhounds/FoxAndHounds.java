@@ -22,6 +22,7 @@ public class FoxAndHounds extends Game {
     public OrthographicCamera camera;
     public AssetManager assets;
     public PawnType winner;
+    public boolean resetBoard;
 
     public void create(){
         assets = new AssetManager();
@@ -29,6 +30,7 @@ public class FoxAndHounds extends Game {
         initFonts();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, WIDTH, HEIGHT);
+        resetBoard = false;
         screenManager = new ScreenManager(this);
     }
     public void render(){
