@@ -2,6 +2,7 @@ package com.mygdx.foxandhounds.screens;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
@@ -56,11 +57,7 @@ public class EndGameScreen implements Screen, InputProcessor {
     public void render(float delta) {
         Gdx.gl.glClearColor(0f,0f,0f,1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        game.batch.begin();
-        game.font.draw(game.batch, endText, FoxAndHounds.WIDTH / 2f - 75, Gdx.graphics.getHeight() * .75f);
-        game.batch.end();
-
+        displayEndText();
         update(delta);
         stage.draw();
     }
@@ -68,7 +65,7 @@ public class EndGameScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+
     }
 
     @Override
@@ -132,6 +129,14 @@ public class EndGameScreen implements Screen, InputProcessor {
         return false;
     }
 
+    private void displayEndText(){
+        game.batch.begin();
+        GlyphLayout layout = new GlyphLayout(game.font, endText);
+        float fontX = FoxAndHounds.WIDTH / 2f - 150f + (300 - layout.width) / 2f;
+        float fontY = Gdx.graphics.getHeight() * .75f;
+        game.font.draw(game.batch, layout, fontX, fontY);
+        game.batch.end();
+    }
     private void initButtons(){
         TextButton playButton = new TextButton("Restart game", skin, "default");
         playButton.setSize(300,100);

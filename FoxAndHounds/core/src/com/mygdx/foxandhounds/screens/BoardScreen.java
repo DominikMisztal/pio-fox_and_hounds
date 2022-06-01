@@ -33,7 +33,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     private final Vector<Hound> hounds;
     private boolean doDrawing;
     private final Stage stage;
-    private GameLogicHandler logicHandler;
+    private final GameLogicHandler logicHandler;
      
 
     public BoardScreen(FoxAndHounds game){
