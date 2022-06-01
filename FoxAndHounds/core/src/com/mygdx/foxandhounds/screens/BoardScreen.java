@@ -124,7 +124,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     @Override
     public boolean keyDown(int keycode) {
         if(keycode == Input.Keys.ESCAPE){
-            doDrawing = (doDrawing == false) ? true : false;
+            doDrawing = !doDrawing;
         }
         return false;
     }

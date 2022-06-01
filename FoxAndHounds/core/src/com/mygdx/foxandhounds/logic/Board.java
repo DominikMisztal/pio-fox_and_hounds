@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mygdx.foxandhounds.screens.BoardScreen;
 
 public class Board extends Stage {
-    private HashMap<Vector2, Tile> boardTiles;
+    private final HashMap<Vector2, Tile> boardTiles;
 
     public Board(BoardScreen bs){
         boardTiles = new HashMap<>();
