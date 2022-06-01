@@ -83,8 +83,6 @@ public class GameLogicHandler {
 
     public void movePawn(Tile prevTile, Tile newTile){
         clearMoves();
-        System.out.println("moving from: " + prevTile.getCoordinates());
-        System.out.println("moving to: " + newTile.getCoordinates());
         currentlySelectedPawn.changePosition((int)newTile.getCoordinates().x, (int)newTile.getCoordinates().y);
         newTile.setPawn(currentlySelectedPawn);
         prevTile.setPawn(null);
@@ -107,7 +105,6 @@ public class GameLogicHandler {
             }
         }
         highestHoundPos = temp;
-        System.out.println("highest pos: " + highestHoundPos);
     }
     
     public void resetBoard(){
