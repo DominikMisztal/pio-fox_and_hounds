@@ -123,15 +123,6 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.T){
-            game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
-        }
-        if(keycode == Input.Keys.NUM_1){
-            currentPlayer = PawnType.FOX;
-        }
-        if(keycode == Input.Keys.NUM_2){
-            currentPlayer = PawnType.HOUND;
-        }
         if(keycode == Input.Keys.ESCAPE){
             doDrawing = (doDrawing == false) ? true : false;
         }

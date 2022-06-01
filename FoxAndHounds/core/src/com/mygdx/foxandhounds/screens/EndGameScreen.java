@@ -144,7 +144,8 @@ public class EndGameScreen implements Screen, InputProcessor {
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.screenManager.setScreen(ScreenManager.STATE.PLAY);
+                game.setScreen(new BoardScreen(game));
+//                game.screenManager.setScreen(ScreenManager.STATE.PLAY);
             }
         });
 
