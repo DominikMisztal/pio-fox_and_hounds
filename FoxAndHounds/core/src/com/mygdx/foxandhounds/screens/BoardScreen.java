@@ -248,6 +248,8 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
 
     public void checkWinCondition(){
         Vector2 temp = fox.getCoordinates();
+        Pawn tempPawn = currentlySelectedPawn;
+        currentlySelectedPawn = fox;
         findMovesFox();
         if(temp.equals(new Vector2(1,7)) || temp.equals(new Vector2(3,7))
             || temp.equals(new Vector2(5,7)) || temp.equals(new Vector2(7,7))){
@@ -260,6 +262,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
             game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
             resetBoard();
         }
+        currentlySelectedPawn = fox;
     }
 
     public void changePlayers(){
