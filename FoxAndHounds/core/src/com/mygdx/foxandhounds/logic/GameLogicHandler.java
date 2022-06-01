@@ -3,7 +3,7 @@ package com.mygdx.foxandhounds.logic;
 import java.util.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.foxandhounds.FoxAndHounds;
-import com.mygdx.foxandhounds.screens.ScreenManager;
+import com.mygdx.foxandhounds.screens.ScreenManager.STATE;
 
 public class GameLogicHandler {
     
@@ -15,10 +15,12 @@ public class GameLogicHandler {
     public final Vector<Tile> tilesToMoveTo;
     private Pawn currentlySelectedPawn;
     private PawnType currentPlayer;
+    private int highestHoundPos;
 
     public GameLogicHandler(){
         tilesToMoveTo = new Vector<>();
         currentPlayer = PawnType.FOX;
+        highestHoundPos = 7;
     }
 
     public void setVariables(Board board, FoxAndHounds game, Fox fox, Vector<Hound> hounds){
@@ -86,9 +88,26 @@ public class GameLogicHandler {
         currentlySelectedPawn.changePosition((int)newTile.getCoordinates().x, (int)newTile.getCoordinates().y);
         newTile.setPawn(currentlySelectedPawn);
         prevTile.setPawn(null);
+        if(currentPlayer == PawnType.HOUND){
+            findHighestHoundPos();
+        }
         changePlayers();
-        checkWinCondition();
+
+        if(checkWinCondition()){
+            finishGame();
+        }
         clearMoves();
+    }
+
+    private void findHighestHoundPos(){
+        int temp = -1;
+        for(Hound hound : hounds) {
+            if((int)hound.getCoordinates().y > temp){
+                temp = (int)hound.getCoordinates().y;
+            }
+        }
+        highestHoundPos = temp;
+        System.out.println("highest pos: " + highestHoundPos);
     }
     
     public void resetBoard(){
@@ -104,23 +123,37 @@ public class GameLogicHandler {
         }
         currentPlayer = PawnType.FOX;
         game.resetBoard = false;
+        highestHoundPos = 7;
     }
 
-    public void checkWinCondition(){
-        Vector2 temp = fox.getCoordinates();
+    private boolean checkWinCondition(){
         Pawn tempPawn = currentlySelectedPawn;
         currentlySelectedPawn = fox;
         findMovesFox();
-        if(temp.equals(new Vector2(1,7)) || temp.equals(new Vector2(3,7))
-            || temp.equals(new Vector2(5,7)) || temp.equals(new Vector2(7,7))){
-            game.winner = PawnType.FOX;
-            game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
-        }
-        else if(tilesToMoveTo.isEmpty()){
-            game.winner  = PawnType.HOUND;
-            game.screenManager.setScreen(ScreenManager.STATE.ENDGAME);
+        if    (fox.getCoordinates().equals(new Vector2(1,7)) 
+            || fox.getCoordinates().equals(new Vector2(3,7))
+            || fox.getCoordinates().equals(new Vector2(5,7)) 
+            || fox.getCoordinates().equals(new Vector2(7,7))
+            || (int)fox.getCoordinates().y > highestHoundPos
+            || tilesToMoveTo.isEmpty()){
+            return true;
         }
         currentlySelectedPawn = tempPawn;
+        return false;
+    }
+
+    private void finishGame(){
+        if    (fox.getCoordinates().equals(new Vector2(1,7)) 
+            || fox.getCoordinates().equals(new Vector2(3,7))
+            || fox.getCoordinates().equals(new Vector2(5,7)) 
+            || fox.getCoordinates().equals(new Vector2(7,7))
+            || (int)fox.getCoordinates().y > highestHoundPos){
+            game.winner = PawnType.FOX;
+        }
+        else{
+            game.winner = PawnType.HOUND;
+        }
+        game.screenManager.setScreen(STATE.ENDGAME);
     }
 
     public void changePlayers(){

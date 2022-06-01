@@ -34,9 +34,7 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
     private boolean doDrawing;
     private final Stage stage;
     private GameLogicHandler logicHandler;
-
-
-    
+     
 
     public BoardScreen(FoxAndHounds game){
         this.stage = new Stage(new FitViewport(FoxAndHounds.WIDTH, FoxAndHounds.HEIGHT, game.camera));
