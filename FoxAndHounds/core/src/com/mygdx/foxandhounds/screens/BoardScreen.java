@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.foxandhounds.FoxAndHounds;
 import com.mygdx.foxandhounds.SoundController;
@@ -111,11 +114,29 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         game.batch.end();
 
         if(doDrawing){
+            activeActors();
             displayPause();
             update(delta);
             stage.draw();
         }
+        else{
+            deactiveActors();
+        }
 
+    }
+
+    private void deactiveActors(){
+        Array<Actor> a = stage.getActors();
+        for(Actor actor: a){
+            actor.setTouchable(Touchable.disabled);
+        }
+    }
+
+    private void activeActors(){
+        Array<Actor> a = stage.getActors();
+        for(Actor actor: a){
+            actor.setTouchable(Touchable.enabled);
+        }
     }
     
     private void update(float delta){
