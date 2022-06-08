@@ -23,6 +23,7 @@ public class FoxAndHounds extends Game {
     public AssetManager assets;
     public PawnType winner;
     public boolean resetBoard;
+    public SoundController soundController;
 
     public void create(){
         assets = new AssetManager();
@@ -32,6 +33,7 @@ public class FoxAndHounds extends Game {
         camera.setToOrtho(false, WIDTH, HEIGHT);
         resetBoard = false;
         screenManager = new ScreenManager(this);
+        soundController = new SoundController();
     }
     public void render(){
         super.render();
