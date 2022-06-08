@@ -74,6 +74,7 @@ public class GameLogicHandler {
         clearMoves();
         currentlySelectedPawn.changePosition((int)newTile.getCoordinates().x, (int)newTile.getCoordinates().y);
         newTile.setPawn(currentlySelectedPawn);
+        game.soundController.playClick();
         prevTile.setPawn(null);
         if(currentPlayer == PawnType.HOUND){
             findHighestHoundPos();
