@@ -41,10 +41,10 @@ public class BoardScreen extends ApplicationAdapter implements InputProcessor, S
         this.game = game;
         this.shapeRenderer = new ShapeRenderer();
         logicHandler = new GameLogicHandler();
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
+        camera.setToOrtho(false,width,height);
         camera.update();
         board = new Board(logicHandler);
         board.getViewport().setCamera(camera);

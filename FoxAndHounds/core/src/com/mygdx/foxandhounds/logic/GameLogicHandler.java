@@ -35,41 +35,28 @@ public class GameLogicHandler {
 
     public void findMovesFox(){
         Vector2 temp = new Vector2();
-        Tile tile;
         temp.x = currentlySelectedPawn.getCoordinates().x-1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);
-        }
+        addToTilesToMoveIfCorrect(temp);
         temp.x = currentlySelectedPawn.getCoordinates().x+1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);          
-        }
+        addToTilesToMoveIfCorrect(temp);
         temp.x = currentlySelectedPawn.getCoordinates().x-1; temp.y = currentlySelectedPawn.getCoordinates().y+1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);           
-        }
+        addToTilesToMoveIfCorrect(temp);
         temp.x = currentlySelectedPawn.getCoordinates().x+1; temp.y = currentlySelectedPawn.getCoordinates().y+1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);           
-        }
+        addToTilesToMoveIfCorrect(temp);
     }
 
     public void findMovesHound(){
         Vector2 temp = new Vector2();
-        Tile tile;
         temp.x = currentlySelectedPawn.getCoordinates().x-1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
-        tile = board.getTile(temp);
-        if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);    
-        }
+        addToTilesToMoveIfCorrect(temp);
         temp.x = currentlySelectedPawn.getCoordinates().x+1; temp.y = currentlySelectedPawn.getCoordinates().y-1;
-        tile = board.getTile(temp);
+        addToTilesToMoveIfCorrect(temp);
+    }
+
+    private void addToTilesToMoveIfCorrect(Vector2 temp){
+        Tile tile = board.getTile(temp);
         if(tile != null && tile.getPawn() == null){
-            tilesToMoveTo.add(tile);     
+            tilesToMoveTo.add(tile);
         }
     }
 
@@ -129,11 +116,7 @@ public class GameLogicHandler {
         Pawn tempPawn = currentlySelectedPawn;
         currentlySelectedPawn = fox;
         findMovesFox();
-        if    (fox.getCoordinates().equals(new Vector2(1,7)) 
-            || fox.getCoordinates().equals(new Vector2(3,7))
-            || fox.getCoordinates().equals(new Vector2(5,7)) 
-            || fox.getCoordinates().equals(new Vector2(7,7))
-            || (int)fox.getCoordinates().y > highestHoundPos
+        if    (isGameOver()
             || tilesToMoveTo.isEmpty()){
             return true;
         }
@@ -142,17 +125,20 @@ public class GameLogicHandler {
     }
 
     private void finishGame(){
-        if    (fox.getCoordinates().equals(new Vector2(1,7)) 
-            || fox.getCoordinates().equals(new Vector2(3,7))
-            || fox.getCoordinates().equals(new Vector2(5,7)) 
-            || fox.getCoordinates().equals(new Vector2(7,7))
-            || (int)fox.getCoordinates().y > highestHoundPos){
+        if    (isGameOver()){
             game.winner = PawnType.FOX;
         }
         else{
             game.winner = PawnType.HOUND;
         }
         game.screenManager.setScreen(STATE.ENDGAME);
+    }
+    private boolean isGameOver(){
+        return fox.getCoordinates().equals(new Vector2(1, 7))
+                || fox.getCoordinates().equals(new Vector2(3, 7))
+                || fox.getCoordinates().equals(new Vector2(5, 7))
+                || fox.getCoordinates().equals(new Vector2(7, 7))
+                || (int) fox.getCoordinates().y > highestHoundPos;
     }
 
     public void changePlayers(){
