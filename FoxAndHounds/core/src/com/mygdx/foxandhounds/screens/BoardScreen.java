@@ -17,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.foxandhounds.FoxAndHounds;
-import com.mygdx.foxandhounds.SoundController;
 import com.mygdx.foxandhounds.logic.*;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;

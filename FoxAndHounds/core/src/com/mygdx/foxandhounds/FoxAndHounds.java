@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mygdx.foxandhounds.logic.PawnType;
+import com.mygdx.foxandhounds.logic.SoundController;
 import com.mygdx.foxandhounds.screens.ScreenManager;
 
 public class FoxAndHounds extends Game {
